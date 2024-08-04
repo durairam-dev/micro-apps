@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <title>Micro Apps | Date Calculator</title>
+    <script src="../scripts/tailwindcss.js"></script>
+  </head>
+  <body>
+    <header
+      class="w-full flex items-center justify-center space-x-2 bg-black h-16"
+    >
+      <a href="../index.html" class="flex">
+        <div class="size-10">
+          <img src="/images/logo.png" alt="logo" />
+        </div>
+        <h1 class="text-3xl font-bold text-white text-center">Micro Apps</h1>
+      </a>
+    </header>
+    <main class="container mx-auto px-4 py-5">
+      <div class="w-full max-w-4xl mx-auto">
+        <ul
+          class="tabs flex sm:flex-row sm:space-x-4 sm:space-y-0 flex-col space-y-2 space-x-0 border-b bg-black rounded-xl p-1"
+        >
+          <li
+            class="tab-link py-2 px-4 font-bold cursor-pointer w-full text-center rounded-lg bg-white"
+            data-tab="tab1"
+          >
+            Dates Gap
+          </li>
+          <li
+            class="tab-link py-2 px-4 font-bold text-white cursor-pointer w-full text-center rounded-lg"
+            data-tab="tab2"
+          >
+            Date Manipulator
+          </li>
+        </ul>
+        <div class="tab-content mt-4">
+          <div id="tab1" class="tab-item">
+            <div class="w-full">
+              <form id="date-form" class="space-y-4">
+                <ul
+                  class="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 lg:gap-4 gap-2 items-center"
+                >
+                  <li>
+                    <input
+                      type="date"
+                      id="start-date"
+                      class="w-full border-2 border-black rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                    />
+                  </li>
+                  <li>
+                    <input
+                      type="date"
+                      id="end-date"
+                      class="w-full border-2 border-black rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                    />
+                  </li>
+                  <li class="flex items-center lg:justify-center justify-start">
+                    <input
+                      id="include-end-date"
+                      type="checkbox"
+                      class="size-4 rounded"
+                    />
+                    <label for="include-end-date" class="ml-2 text-lg">
+                      Include End Date
+                    </label>
+                  </li>
+                  <li>
+                    <div class="relative inline-block text-left w-full">
+                      <button
+                        type="button"
+                        id="dropdown-button"
+                        class="inline-flex items-center justify-between w-full rounded-md border-2 border-black shadow-sm px-4 py-2 bg-white text-md font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                        aria-haspopup="true"
+                        aria-expanded="true"
+                      >
+                        Select Weekdays
+                        <svg
+                          class="size-6 ml-2"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m19 9-7 7-7-7"
+                          />
+                        </svg>
+                      </button>
+                      <div
+                        id="dropdown-menu"
+                        class="origin-top-left absolute left-0 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
+                        role="menu"
+                        aria-orientation="vertical"
+                        aria-labelledby="dropdown-button"
+                      >
+                        <ul class="py-1">
+                          <li class="flex px-4 py-2">
+                            <input
+                              type="checkbox"
+                              id="all-days"
+                              value="all"
+                              class="size-4 border-black rounded"
+                              checked
+                            />
+                            <label for="all-days" class="ml-2 block text-sm">
+                              All
+                            </label>
+                          </li>
+                          <li class="flex px-4 py-2">
+                            <input
+                              type="checkbox"
+                              id="monday"
+                              value="1"
+                              class="size-4 border-black rounded"
+                              checked
+                            />
+                            <label for="monday" class="ml-2 block text-sm">
+                              Monday
+                            </label>
+                          </li>
+                          <li class="flex px-4 py-2">
+                            <input
+                              type="checkbox"
+                              id="tuesday"
+                              value="2"
+                              class="size-4 border-black rounded"
+                              checked
+                            />
+                            <label for="tuesday" class="ml-2 block text-sm">
+                              Tuesday
+                            </label>
+                          </li>
+                          <li class="flex px-4 py-2">
+                            <input
+                              type="checkbox"
+                              id="wednesday"
+                              value="3"
+                              class="size-4 border-black rounded"
+                              checked
+                            />
+                            <label for="wednesday" class="ml-2 block text-sm">
+                              Wednesday
+                            </label>
+                          </li>
+                          <li class="flex px-4 py-2">
+                            <input
+                              type="checkbox"
+                              id="thursday"
+                              value="4"
+                              class="size-4 border-black rounded"
+                              checked
+                            />
+                            <label for="thursday" class="ml-2 block text-sm">
+                              Thursday
+                            </label>
+                          </li>
+                          <li class="flex px-4 py-2">
+                            <input
+                              type="checkbox"
+                              id="friday"
+                              value="5"
+                              class="size-4 border-black rounded"
+                              checked
+                            />
+                            <label for="friday" class="ml-2 block text-sm">
+                              Friday
+                            </label>
+                          </li>
+                          <li class="flex px-4 py-2">
+                            <input
+                              type="checkbox"
+                              id="saturday"
+                              value="6"
+                              class="size-4 border-black rounded"
+                              checked
+                            />
+                            <label for="saturday" class="ml-2 block text-sm">
+                              Saturday
+                            </label>
+                          </li>
+                          <li class="flex px-4 py-2">
+                            <input
+                              type="checkbox"
+                              id="sunday"
+                              value="0"
+                              class="size-4 border-black rounded"
+                              checked
+                            />
+                            <label for="sunday" class="ml-2 block text-sm">
+                              Sunday
+                            </label>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      id="calculate-btn"
+                      class="w-full bg-black text-white py-2 rounded-md"
+                    >
+                      Calculate Interval
+                    </button>
+                  </li>
+                </ul>
+              </form>
+              <ul
+                id="result"
+                class="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 md:gap-4 gap-2 mt-4"
+              ></ul>
+            </div>
+          </div>
+          <div id="tab2" class="tab-item hidden">
+            <p>This is the content of Tab 2.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const tabs = document.querySelectorAll(".tab-link");
+        const tabContents = document.querySelectorAll(".tab-item");
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            tabs.forEach((t) => {
+              t.classList.remove("bg-white");
+              t.classList.add("text-white");
+            });
+
+            tab.classList.remove("text-white");
+            tab.classList.add("bg-white");
+
+            const target = tab.getAttribute("data-tab");
+            tabContents.forEach((content) => {
+              content.classList.add("hidden");
+              if (content.id === target) {
+                content.classList.remove("hidden");
+              }
+            });
+          });
+        });
+
+        // Default to the first tab
+        tabs[0].click();
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const dropdownButton = document.getElementById("dropdown-button");
+        const dropdownMenu = document.getElementById("dropdown-menu");
+        const allDaysCheckbox = document.getElementById("all-days");
+        const weekdayCheckboxes = document.querySelectorAll(
+          "input[type=checkbox]:not(#all-days):not(#include-end-date)"
+        );
+
+        // Toggle dropdown menu visibility
+        dropdownButton.addEventListener("click", () => {
+          dropdownMenu.classList.toggle("hidden");
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", (event) => {
+          if (
+            !dropdownButton.contains(event.target) &&
+            !dropdownMenu.contains(event.target)
+          ) {
+            dropdownMenu.classList.add("hidden");
+          }
+        });
+
+        // Synchronize "All" checkbox with individual checkboxes
+        allDaysCheckbox.addEventListener("change", () => {
+          weekdayCheckboxes.forEach(
+            (checkbox) => (checkbox.checked = allDaysCheckbox.checked)
+          );
+        });
+
+        weekdayCheckboxes.forEach((checkbox) => {
+          checkbox.addEventListener("change", () => {
+            if (!checkbox.checked) {
+              allDaysCheckbox.checked = false;
+            } else if (
+              Array.from(weekdayCheckboxes).every((cb) => cb.checked)
+            ) {
+              allDaysCheckbox.checked = true;
+            }
+          });
+        });
+      });
+
+      document.getElementById("calculate-btn").addEventListener("click", () => {
+        const startDate = new Date(document.getElementById("start-date").value);
+        const endDate = new Date(document.getElementById("end-date").value);
+        const includeEndDate =
+          document.getElementById("include-end-date").checked;
+        const weekdays = Array.from(
+          document.querySelectorAll(
+            "input[type=checkbox]:not(#all-days):not(#include-end-date):checked"
+          )
+        ).map((checkbox) => parseInt(checkbox.value));
+
+        if (!startDate || !endDate || startDate > endDate) {
+          alert("Please select a valid date range.");
+          return;
+        }
+
+        let intervalDays = calculateDaysInterval(
+          startDate,
+          endDate,
+          includeEndDate,
+          weekdays
+        );
+        displayResults(intervalDays);
+      });
+
+      function calculateDaysInterval(
+        startDate,
+        endDate,
+        includeEndDate,
+        weekdays
+      ) {
+        if (includeEndDate) endDate.setDate(endDate.getDate() + 1);
+        let currentDate = new Date(startDate);
+        let daysCount = 0;
+
+        while (currentDate < endDate) {
+          if (weekdays.includes(currentDate.getDay())) daysCount++;
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        return daysCount;
+      }
+
+      function displayResults(daysCount) {
+        let result = "";
+        let remainingDays = daysCount;
+
+        const years = Math.floor(remainingDays / 365);
+        remainingDays %= 365;
+        const months = Math.floor(remainingDays / 30);
+        remainingDays %= 30;
+        const weeks = Math.floor(remainingDays / 7);
+        remainingDays %= 7;
+        const days = remainingDays;
+
+        const hours = daysCount * 24;
+        const minutes = daysCount * 24 * 60;
+        const seconds = daysCount * 24 * 60 * 60;
+
+        result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Days: ${daysCount}</li>`;
+        if (years > 0)
+          result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Years: ${years}, Months: ${months}, Weeks: ${weeks}, Days: ${days}</li>`;
+        if (months > 0)
+          result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Months: ${months}, Weeks: ${weeks}, Days: ${days}</li>`;
+        if (weeks > 0)
+          result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Weeks: ${weeks}, Days: ${days}</li>`;
+        if (days > 0)
+          result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Days: ${days}</li>`;
+
+        result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Hours: ${hours}</li>`;
+        result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Minutes: ${minutes}</li>`;
+        result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Seconds: ${seconds}</li>`;
+
+        document.getElementById("result").innerHTML = result;
+      }
+    </script>
+  </body>
+</html>
