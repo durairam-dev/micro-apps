@@ -6,6 +6,7 @@
     <link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
     <title>Micro Apps | Date Calculator</title>
     <script src="../scripts/tailwindcss.js"></script>
+    <script src="../scripts/dateCalculator.js"></script>
   </head>
   <body>
     <header
@@ -18,7 +19,7 @@
         <h1 class="text-3xl font-bold text-white text-center">Micro Apps</h1>
       </a>
     </header>
-    <main class="container mx-auto px-4 py-5">
+    <main class="container mx-auto lg:p-4 p-2">
       <div class="w-full max-w-4xl mx-auto">
         <ul
           class="tabs flex sm:flex-row sm:space-x-4 sm:space-y-0 flex-col space-y-2 space-x-0 border-b bg-black rounded-xl p-1"
@@ -47,14 +48,14 @@
                     <input
                       type="date"
                       id="start-date"
-                      class="w-full border-2 border-black rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                      class="w-full border-2 border-black rounded-md p-2 focus:outline-none uppercase font-bold"
                     />
                   </li>
                   <li>
                     <input
                       type="date"
                       id="end-date"
-                      class="w-full border-2 border-black rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                      class="w-full border-2 border-black rounded-md p-2 focus:outline-none uppercase font-bold"
                     />
                   </li>
                   <li class="flex items-center lg:justify-center justify-start">
@@ -63,7 +64,10 @@
                       type="checkbox"
                       class="size-4 rounded"
                     />
-                    <label for="include-end-date" class="ml-2 text-lg">
+                    <label
+                      for="include-end-date"
+                      class="ml-2 text-lg font-semibold"
+                    >
                       Include End Date
                     </label>
                   </li>
@@ -72,7 +76,7 @@
                       <button
                         type="button"
                         id="dropdown-button"
-                        class="inline-flex items-center justify-between w-full rounded-md border-2 border-black shadow-sm px-4 py-2 bg-white text-md font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                        class="inline-flex items-center justify-between w-full rounded-md border-2 border-black shadow-sm px-4 py-2 bg-white text-md font-semibold focus:outline-none"
                         aria-haspopup="true"
                         aria-expanded="true"
                       >
@@ -206,22 +210,80 @@
                   <li>
                     <button
                       type="button"
-                      id="calculate-btn"
-                      class="w-full bg-black text-white py-2 rounded-md"
+                      class="w-full bg-black text-white font-semibold py-2 rounded-md"
+                      onclick="dateInterval()"
                     >
                       Calculate Interval
                     </button>
                   </li>
                 </ul>
               </form>
-              <ul
-                id="result"
-                class="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 md:gap-4 gap-2 mt-4"
-              ></ul>
+              <div class="flex flex-col space-y-2">
+                <ul
+                  id="breakdown-result"
+                  class="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 md:gap-4 gap-2 mt-2"
+                ></ul>
+                <ul
+                  id="total-result"
+                  class="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 md:gap-4 gap-2 mt-2"
+                ></ul>
+              </div>
             </div>
           </div>
           <div id="tab2" class="tab-item hidden">
-            <p>This is the content of Tab 2.</p>
+            <div class="w-full">
+              <ul
+                class="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 lg:gap-4 gap-2 items-center"
+              >
+                <li>
+                  <input
+                    type="date"
+                    id="date"
+                    class="w-full border-2 border-black rounded-md p-2 focus:outline-none uppercase font-bold"
+                  />
+                </li>
+                <li>
+                  <select
+                    id="operation"
+                    class="h-10 w-full bg-white rounded border-r-8 border-transparent px-4 text-md outline outline-2 outline-black"
+                  >
+                    <option value="none">Operation</option>
+                    <option value="add">Add</option>
+                    <option value="subtract">Subtract</option>
+                  </select>
+                </li>
+                <li>
+                  <select
+                    id="unit"
+                    class="h-10 w-full bg-white rounded border-r-8 border-transparent px-4 text-md outline outline-2 outline-black"
+                  >
+                    <option value="none">Unit</option>
+                    <option value="years">Years</option>
+                    <option value="months">Months</option>
+                    <option value="weeks">Weeks</option>
+                    <option value="days">Days</option>
+                  </select>
+                </li>
+                <li>
+                  <input
+                    type="number"
+                    id="amount"
+                    class="w-full border-2 border-black rounded-md p-2 focus:outline-none uppercase font-bold"
+                    value="0"
+                  />
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    class="w-full bg-black text-white font-semibold py-2 rounded-md"
+                    onclick="dateManipulator()"
+                  >
+                    Calculate
+                  </button>
+                </li>
+              </ul>
+              <div id="output-date" class="mt-2 lg:w-1/4 md:w-1/3 w-full"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -254,125 +316,6 @@
         // Default to the first tab
         tabs[0].click();
       });
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const dropdownButton = document.getElementById("dropdown-button");
-        const dropdownMenu = document.getElementById("dropdown-menu");
-        const allDaysCheckbox = document.getElementById("all-days");
-        const weekdayCheckboxes = document.querySelectorAll(
-          "input[type=checkbox]:not(#all-days):not(#include-end-date)"
-        );
-
-        // Toggle dropdown menu visibility
-        dropdownButton.addEventListener("click", () => {
-          dropdownMenu.classList.toggle("hidden");
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener("click", (event) => {
-          if (
-            !dropdownButton.contains(event.target) &&
-            !dropdownMenu.contains(event.target)
-          ) {
-            dropdownMenu.classList.add("hidden");
-          }
-        });
-
-        // Synchronize "All" checkbox with individual checkboxes
-        allDaysCheckbox.addEventListener("change", () => {
-          weekdayCheckboxes.forEach(
-            (checkbox) => (checkbox.checked = allDaysCheckbox.checked)
-          );
-        });
-
-        weekdayCheckboxes.forEach((checkbox) => {
-          checkbox.addEventListener("change", () => {
-            if (!checkbox.checked) {
-              allDaysCheckbox.checked = false;
-            } else if (
-              Array.from(weekdayCheckboxes).every((cb) => cb.checked)
-            ) {
-              allDaysCheckbox.checked = true;
-            }
-          });
-        });
-      });
-
-      document.getElementById("calculate-btn").addEventListener("click", () => {
-        const startDate = new Date(document.getElementById("start-date").value);
-        const endDate = new Date(document.getElementById("end-date").value);
-        const includeEndDate =
-          document.getElementById("include-end-date").checked;
-        const weekdays = Array.from(
-          document.querySelectorAll(
-            "input[type=checkbox]:not(#all-days):not(#include-end-date):checked"
-          )
-        ).map((checkbox) => parseInt(checkbox.value));
-
-        if (!startDate || !endDate || startDate > endDate) {
-          alert("Please select a valid date range.");
-          return;
-        }
-
-        let intervalDays = calculateDaysInterval(
-          startDate,
-          endDate,
-          includeEndDate,
-          weekdays
-        );
-        displayResults(intervalDays);
-      });
-
-      function calculateDaysInterval(
-        startDate,
-        endDate,
-        includeEndDate,
-        weekdays
-      ) {
-        if (includeEndDate) endDate.setDate(endDate.getDate() + 1);
-        let currentDate = new Date(startDate);
-        let daysCount = 0;
-
-        while (currentDate < endDate) {
-          if (weekdays.includes(currentDate.getDay())) daysCount++;
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-
-        return daysCount;
-      }
-
-      function displayResults(daysCount) {
-        let result = "";
-        let remainingDays = daysCount;
-
-        const years = Math.floor(remainingDays / 365);
-        remainingDays %= 365;
-        const months = Math.floor(remainingDays / 30);
-        remainingDays %= 30;
-        const weeks = Math.floor(remainingDays / 7);
-        remainingDays %= 7;
-        const days = remainingDays;
-
-        const hours = daysCount * 24;
-        const minutes = daysCount * 24 * 60;
-        const seconds = daysCount * 24 * 60 * 60;
-
-        result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Days: ${daysCount}</li>`;
-        if (years > 0)
-          result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Years: ${years}, Months: ${months}, Weeks: ${weeks}, Days: ${days}</li>`;
-        if (months > 0)
-          result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Months: ${months}, Weeks: ${weeks}, Days: ${days}</li>`;
-        if (weeks > 0)
-          result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Weeks: ${weeks}, Days: ${days}</li>`;
-        if (days > 0)
-          result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Days: ${days}</li>`;
-
-        result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Hours: ${hours}</li>`;
-        result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Minutes: ${minutes}</li>`;
-        result += `<li class="flex items-center justify-center text-md font-medium px-2 py-1 border-2 rounded-lg shadow-lg">Seconds: ${seconds}</li>`;
-
-        document.getElementById("result").innerHTML = result;
-      }
     </script>
   </body>
 </html>
