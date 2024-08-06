@@ -3,12 +3,14 @@ function clickGenerateButton() {
   const includeUppercase = document.getElementById("includeUppercase").checked;
   const includeNumbers = document.getElementById("includeNumbers").checked;
   const includeSymbols = document.getElementById("includeSymbols").checked;
-  document.getElementById("generatedPassword").value = generatePassword(
+  const generatedPassword = document.getElementById("generatedPassword");
+  generatedPassword.innerText = generatePassword(
     length,
     includeUppercase,
     includeNumbers,
     includeSymbols
   );
+  generatedPassword.disabled = false;
 }
 
 function generatePassword(
@@ -59,4 +61,14 @@ function generatePassword(
     .join("");
 
   return password;
+}
+
+function copyText() {
+  const generatedPassword = document.getElementById("generatedPassword");
+  const text = generatedPassword.innerText;
+  navigator.clipboard.writeText(text);
+  generatedPassword.innerText = "Copied";
+  setTimeout(() => {
+    generatedPassword.innerText = text;
+  }, 2000);
 }
