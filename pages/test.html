@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Units Converter</title>
+    <script src="../scripts/tailwindcss.js"></script>
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-4xl p-6 bg-white shadow-lg rounded-lg">
+      <h1 class="text-2xl font-bold mb-6">Units Converter</h1>
+      <form id="converter-form" class="space-y-4">
+        <div>
+          <label for="unit-type" class="block text-sm font-medium text-gray-700"
+            >Unit Type</label
+          >
+          <select
+            id="unit-type"
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          >
+            <option value="currency">Currency</option>
+            <option value="length">Length</option>
+            <option value="mass">Mass</option>
+            <option value="area">Area</option>
+            <option value="time">Time</option>
+            <option value="data">Data</option>
+            <option value="volume">Volume</option>
+            <option value="numeral">Numeral</option>
+            <option value="speed">Speed</option>
+            <option value="temperature">Temperature</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="from-unit" class="block text-sm font-medium text-gray-700"
+            >From Unit</label
+          >
+          <select
+            id="from-unit"
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          >
+            <!-- Options will be dynamically populated based on selected unit type -->
+          </select>
+        </div>
+
+        <div>
+          <label for="to-unit" class="block text-sm font-medium text-gray-700"
+            >To Unit</label
+          >
+          <select
+            id="to-unit"
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          >
+            <!-- Options will be dynamically populated based on selected unit type -->
+          </select>
+        </div>
+
+        <div>
+          <label for="amount" class="block text-sm font-medium text-gray-700"
+            >Amount</label
+          >
+          <input
+            id="amount"
+            type="number"
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        <button
+          type="button"
+          id="convert-btn"
+          class="w-full bg-blue-500 text-white py-2 rounded-md"
+        >
+          Convert
+        </button>
+      </form>
+
+      <div id="result" class="mt-6 text-lg font-semibold"></div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const unitTypes = {
+          currency: {
+            USD: 1.0,
+            EUR: 1.07,
+            JPY: 0.0073,
+            GBP: 1.23,
+            AUD: 0.66,
+            CAD: 0.74,
+            CHF: 1.0,
+            CNY: 0.14,
+            SEK: 0.091,
+            NZD: 0.61,
+            MXN: 0.055,
+            SGD: 0.74,
+            HKD: 0.13,
+            NOK: 0.092,
+            KRW: 0.00076,
+            TRY: 0.037,
+            RUB: 0.013,
+            INR: 0.012,
+            BRL: 0.2,
+            ZAR: 0.053,
+            AED: 0.27,
+          },
+          length: { m: 1, cm: 100, km: 0.001, inch: 39.37, ft: 3.281 },
+          mass: { kg: 1, g: 1000, lb: 2.205, oz: 35.274 },
+          area: { sqm: 1, sqkm: 0.000001, sqft: 10.764, sqinch: 1550 },
+          time: { sec: 1, min: 0.01667, hour: 0.000278, day: 0.000011574 },
+          data: { byte: 1, kb: 0.001, mb: 0.000001, gb: 0.000000001 },
+          volume: { l: 1, ml: 1000, cuft: 0.0353, gal: 0.2642 },
+          numeral: { decimal: 1, binary: 2, octal: 8, hex: 16 },
+          speed: { mps: 1, kph: 3.6, mph: 2.237 },
+          temperature: {
+            celsius: 1,
+            fahrenheit: (x) => (x * 9) / 5 + 32,
+            kelvin: (x) => x + 273.15,
+          },
+        };
+
+        const unitTypeSelect = document.getElementById("unit-type");
+        const fromUnitSelect = document.getElementById("from-unit");
+        const toUnitSelect = document.getElementById("to-unit");
+        const amountInput = document.getElementById("amount");
+        const convertBtn = document.getElementById("convert-btn");
+        const resultDiv = document.getElementById("result");
+
+        function updateUnits() {
+          const type = unitTypeSelect.value;
+          const units = unitTypes[type];
+
+          fromUnitSelect.innerHTML = "";
+          toUnitSelect.innerHTML = "";
+
+          for (const unit in units) {
+            const optionFrom = document.createElement("option");
+            optionFrom.value = unit;
+            optionFrom.textContent = unit;
+            fromUnitSelect.appendChild(optionFrom);
+
+            const optionTo = document.createElement("option");
+            optionTo.value = unit;
+            optionTo.textContent = unit;
+            toUnitSelect.appendChild(optionTo);
+          }
+        }
+
+        function convert() {
+          const type = unitTypeSelect.value;
+          const fromUnit = fromUnitSelect.value;
+          const toUnit = toUnitSelect.value;
+          const amount = parseFloat(amountInput.value);
+
+          if (!unitTypes[type][fromUnit] || !unitTypes[type][toUnit]) {
+            resultDiv.textContent = "Invalid units selected";
+            return;
+          }
+
+          let convertedAmount;
+          if (type === "temperature") {
+            if (fromUnit === toUnit) {
+              convertedAmount = amount;
+            } else {
+              convertedAmount = unitTypes[type][toUnit](amount);
+            }
+          } else {
+            const conversionRate =
+              unitTypes[type][toUnit] / unitTypes[type][fromUnit];
+            convertedAmount = amount * conversionRate;
+          }
+
+          resultDiv.textContent = `Result: ${convertedAmount.toFixed(
+            2
+          )} ${toUnit}`;
+        }
+
+        unitTypeSelect.addEventListener("change", updateUnits);
+        convertBtn.addEventListener("click", convert);
+
+        // Initialize units
+        updateUnits();
+      });
+    </script>
+  </body>
+</html>
